@@ -11,6 +11,7 @@ const positionRoutes = require('./routes/position')
 const keys = require('./config/keys')
 const app = express()
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect(keys.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -19,7 +20,7 @@ mongoose.connect(keys.MONGO_URI, {
     .catch(e => console.log('DB connection failed'))
 app.use(passport.initialize())
 require('./middleware/passport')(passport)
-app.use(require('morgan')())
+app.use(require('morgan')('combined'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(require('cors')())
