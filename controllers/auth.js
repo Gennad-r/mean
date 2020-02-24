@@ -31,39 +31,40 @@ module.exports.login = async function(req, res) {
 }
 
 module.exports.register = async function(req, res) {
-    const candidate = await User.findOne({email: req.body.email})
-    
-    if (candidate) {
-        res.status(409).json({
-            message: 'This email is already registered!'
-        })
-        return
-    }
-    if (!validator.isEmail(req.body.email)) {
-        res.status(412).json({
-            message: 'Invalid email! Check it please.'
-        })
-        return
-    }
-    const password = req.body.password
-    if (password.length < 6) {
-        res.status(412).json({
-            message: 'Password must be 6 symbols at least'
-        })
-        return
-    }
-    if (password.length > 16) {
-        res.status(412).json({
-            message: 'Password maximum length is 16 symbols'
-        })
-        return
-    }
-    const salt = bcrypt.genSaltSync(10)
-    const user = new User({
-        email: req.body.email,
-        password: bcrypt.hashSync(password, salt)
-    })
+
     try {
+        const candidate = await User.findOne({email: req.body.email})
+        
+        if (candidate) {
+            res.status(409).json({
+                message: 'This email is already registered!'
+            })
+            return
+        }
+        if (!validator.isEmail(req.body.email)) {
+            res.status(412).json({
+                message: 'Invalid email! Check it please.'
+            })
+            return
+        }
+        const password = req.body.password
+        if (password.length < 6) {
+            res.status(412).json({
+                message: 'Password must be 6 symbols at least'
+            })
+            return
+        }
+        if (password.length > 16) {
+            res.status(412).json({
+                message: 'Password maximum length is 16 symbols'
+            })
+            return
+        }
+        const salt = bcrypt.genSaltSync(10)
+        const user = new User({
+            email: req.body.email,
+            password: bcrypt.hashSync(password, salt)
+        })
         await user.save()
         res.status(201).json({
             message: 'New user was created'
