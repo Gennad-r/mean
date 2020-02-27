@@ -4,7 +4,10 @@
   "description": "Mongo, Express, Angular9, NodeJS project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index"
+    "server": "nodemon index",
+    "client-install": "npm i --prefix client",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [
     "angular",
@@ -29,6 +32,7 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "nodemon": "^2.0.2"
   }
 }

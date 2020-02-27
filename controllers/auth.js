@@ -54,7 +54,7 @@ module.exports.register = async function(req, res) {
             })
             return
         }
-        if (password.length > 16) {
+        if (password.length > 32) {
             res.status(412).json({
                 message: 'Password maximum length is 16 symbols'
             })
