@@ -1,1 +1,19 @@
-<p>products works!</p>
+<div class="page-title">
+  <h4>Products</h4>
+  <button class="waves-effect waves-light btn grey darken-1">Add product</button>
+</div>
+
+<div *ngIf="products; else spinner" class="row">
+  <div class="col s12">
+    <div class="collection">
+      <a
+        *ngFor="let product of products"
+        href="#!"
+        class="collection-item"
+      >{{product.name}}</a>
+    </div>
+  </div>
+</div>
+<ng-template #spinner>
+  <app-spinner #spinner></app-spinner>
+</ng-template>

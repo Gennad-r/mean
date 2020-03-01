@@ -16,6 +16,7 @@ import { AnaliticsComponent } from './analitics/analitics.component';
 import { HistoryComponent } from './history/history.component';
 import { OrderComponent } from './order/order.component';
 import { ProductsComponent } from './products/products.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ProductsComponent } from './products/products.component';
     AnaliticsComponent,
     HistoryComponent,
     OrderComponent,
-    ProductsComponent
+    ProductsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
