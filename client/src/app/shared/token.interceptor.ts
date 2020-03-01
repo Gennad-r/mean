@@ -1,18 +1,43 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {AuthService} from './services/auth.service';
+import {catchError} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {
+  }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return next.handle(request);
+    if (this.auth.isAuthenticated()) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: this.auth.getToken()
+        }
+      });
+    }
+    return next.handle(request).pipe(
+      catchError((e: HttpErrorResponse): Observable<any> => {
+        if (e.status === 401) {
+          this.router.navigate(['/login'], {
+            queryParams: {
+              sessionExpired: true
+            }
+          });
+        }
+        return throwError(e);
+      })
+    );
   }
 }

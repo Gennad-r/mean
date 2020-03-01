@@ -1,2 +1,10 @@
 @import "~materialize-css/dist/css/materialize.min.css";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import "theme/styles/styles.min.css";
+
+.show-pass {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  cursor: pointer;
+}

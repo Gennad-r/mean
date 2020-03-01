@@ -24,11 +24,16 @@
     <div class="input-field">
       <input
         id="password"
-        type="password"
+        [type]="show ? 'text' : 'password'"
         formControlName="password"
         [class.invalid]="form.get('password').invalid && form.get('password').touched"
       >
       <label for="password">Password:</label>
+      <i
+        (click)="show = !show"
+        class="show-pass tiny material-icons"
+        [ngClass]="show ? 'teal-text' : 'grey-text lighten-2'"
+      >remove_red_eye</i>
       <span
         *ngIf="form.get('password').invalid && form.get('password').touched"
         class="helper-text red-text"

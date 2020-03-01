@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from "../shared/services/auth.service";
-import {Subscription} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
+import {AuthService} from '../shared/services/auth.service';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {MaterialMSG} from '../shared/msg.service';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public form: FormGroup;
+  public show = false;
   private authSubs: Subscription;
 
   constructor(
@@ -25,6 +27,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(32)])
     });
 
+    this.route.queryParams.subscribe((params: Params) => {
+      if (params.registered) {
+        MaterialMSG.message('Use your email and password to login');
+      } else if (params.accessDenied) {
+        MaterialMSG.message('You should been registered to access this page');
+      } else if (params.sessionExpired) {
+        MaterialMSG.message('Your session is expired. Login please again.');
+      }
+    });
   }
   ngOnDestroy(): void {
     if (this.authSubs) {
@@ -35,10 +46,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.form.disable();
     this.authSubs = this.auth.login(this.form.value).subscribe(
-      () => console.log('granted'),
+      () => {
+        this.router.navigate(['/overview']);
+      },
       (e) => {
         this.form.enable();
-        console.log(e);
+        MaterialMSG.message(e.error.message);
       }
     );
   }
